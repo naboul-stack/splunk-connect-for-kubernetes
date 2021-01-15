@@ -292,6 +292,8 @@ data:
           label_k8s-app ${record.dig("kubernetes","labels","k8s-app")}
           label_release ${record.dig("kubernetes","labels","release")}
           exclude_list ${record.dig("kubernetes", "annotations", "splunk.com/exclude") ? record.dig("kubernetes", "annotations", "splunk.com/exclude") : record.dig("kubernetes", "namespace_annotations", "splunk.com/exclude") ? (record["kubernetes"]["namespace_annotations"]["splunk.com/exclude"]) : ("false")}
+          service_name ${record.dig("kubernetes", "annotations", "c2c.metadata/service-name")
+          c2c_log {"line": "${log}", "attrs":{"service":"${record.dig("kubernetes", "annotations", "c2c.metadata/service-name")"}}
         </record>
       </filter>
       <filter tail.containers.**>
@@ -307,19 +309,19 @@ data:
       # create source and sourcetype
       <filter journald.**>
         @type jq_transformer
-        jq '.record.source = "/run/log/journal/" + .record.source | .record.sourcetype = (.tag | ltrimstr("journald.")) | .record.cluster_name = "cluster_name" | .record.index = "main" |.record'
+        jq '.record.source = "/run/log/journal/" + .record.source | .record.sourcetype = (.tag | ltrimstr("journald.")) | .record.cluster_name = "cluster_name" | .record.index = "c2cservice_test" |.record'
       </filter>
 
       # = filters for non-container log files =
       # extract sourcetype
       <filter tail.file.**>
         @type jq_transformer
-        jq '.record.sourcetype = (.tag | ltrimstr("tail.file.")) | .record.cluster_name = "cluster_name" | .record.index = "main" | .record'
+        jq '.record.sourcetype = (.tag | ltrimstr("tail.file.")) | .record.cluster_name = "cluster_name" | .record.index = "c2cservice_test" | .record'
       </filter>
       # = filters for monitor agent =
       <filter monitor_agent>
         @type jq_transformer
-        jq ".record.source = \"namespace:#{ENV['MY_NAMESPACE']}/pod:#{ENV['MY_POD_NAME']}\" | .record.sourcetype = \"fluentd:monitor-agent\" | .record.cluster_name = \"cluster_name\" | .record.index = \"main\" | .record"
+        jq ".record.source = \"namespace:#{ENV['MY_NAMESPACE']}/pod:#{ENV['MY_POD_NAME']}\" | .record.sourcetype = \"fluentd:monitor-agent\" | .record.cluster_name = \"cluster_name\" | .record.index = \"c2cservice_test\" | .record"
       </filter>
       # = custom filters specified by users =
 
@@ -349,6 +351,7 @@ data:
           label_app
           label_k8s-app
           label_release
+          service_name
         </fields>
         <buffer>
           @type memory
@@ -367,7 +370,7 @@ data:
         <format>
           # we just want to keep the raw logs, not the structure created by docker or journald
           @type single_value
-          message_key log
+          message_key c2c_log
           add_newline false
         </format>
       </match>
