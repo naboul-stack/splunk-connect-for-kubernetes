@@ -292,6 +292,9 @@ data:
           label_k8s-app ${record.dig("kubernetes","labels","k8s-app")}
           label_release ${record.dig("kubernetes","labels","release")}
           exclude_list ${record.dig("kubernetes", "annotations", "splunk.com/exclude") ? record.dig("kubernetes", "annotations", "splunk.com/exclude") : record.dig("kubernetes", "namespace_annotations", "splunk.com/exclude") ? (record["kubernetes"]["namespace_annotations"]["splunk.com/exclude"]) : ("false")}
+          line log
+          service_name ${record.dig("kubernetes","annotations","c2c.metadata/service"}
+          attrs {"service" : ${record.dig("kubernetes","annotations","c2c.metadata/service"}}
         </record>
       </filter>
       <filter tail.containers.**>
@@ -349,6 +352,7 @@ data:
           label_app
           label_k8s-app
           label_release
+          service_name
         </fields>
         <buffer>
           @type memory
