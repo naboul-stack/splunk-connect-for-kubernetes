@@ -1,0 +1,19 @@
+{
+    "line": "[2021-01-08T12:52:40.802Z] \"POST /v1/address-module/2.30.3/load_success?iid=3243&metadata=swe&sid=2656b737-6103-49bc-9fb0-cad55137c67c&timestamp=1610110360796 HTTP/1.1\" 204 - 0 0 0 0 \"217.215.234.62, 130.176.149.72\" \"Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 [FBAN/FBIOS;FBDV/iPhone9,3;FBMD/iPhone;FBSN/iOS;FBSV/14.3;FBSS/2;FBID/phone;FBLC/sv_SE;FBOP/5]\" \"43284af0-60a0-4c84-8ff8-aaa210488ce9\" \"frontend-event-router-eu.production.c2c.klarna.net\" \"127.0.0.1:8080\" \"10.160.53.18:443\" \"130.176.149.72:0\" \"217.215.234.62, 130.176.149.72\" \"43284af0-60a0-4c84-8ff8-aaa210488ce9\" \"Root=1-5ff85598-0e9589e77cd788705db65c6f\" \"43284af0-60a0-4c84-8ff8-aaa210488ce9\" \"-\" \"-\" \"-\"",
+    "attrs": {
+        "service": "frontend-event-router",
+        "partition": "eu",
+        "stage": "production",
+        "version": "1dbd6f6497d",
+        "role": "primary",
+        "type": "ingress"
+    }
+}
+
+
+
+Splunk Endpoint to ingest data: https://splunk-collector.klarna.net/services/collector
+Just the host: https://splunk-collector.klarna.net/
+HEC Token: 111a8b83-ccd9-4d8f-82ce-a5961ee12d3e
+Index: c2cservice_test
+Sourcetype: c2cservice

@@ -268,6 +268,11 @@ data:
         de_dot false
       </filter>
       <filter tail.containers.**>
+        @type kubernetes_metadata
+        annotation_match [ "^c2c\.metadata" ]
+        de_dot false
+      </filter>
+      <filter tail.containers.**>
         @type record_transformer
         enable_ruby
         <record>
@@ -282,7 +287,7 @@ data:
           # set the cluster_name field to the configured value, or default to "cluster_name"
           cluster_name cluster_name
           # set the index field to the value found in the pod splunk.com/index annotations. if not set, use namespace annotation, or default to the default_index
-          index ${record.dig("kubernetes", "annotations", "splunk.com/index") ? record.dig("kubernetes", "annotations", "splunk.com/index") : record.dig("kubernetes", "namespace_annotations", "splunk.com/index") ? (record["kubernetes"]["namespace_annotations"]["splunk.com/index"]) : ("main")}
+          index ${record.dig("kubernetes", "annotations", "splunk.com/index") ? record.dig("kubernetes", "annotations", "splunk.com/index") : record.dig("kubernetes", "namespace_annotations", "splunk.com/index") ? (record["kubernetes"]["namespace_annotations"]["splunk.com/index"]) : ("c2cservice_test")}
           label_app ${record.dig("kubernetes","labels","app")}
           label_k8s-app ${record.dig("kubernetes","labels","k8s-app")}
           label_release ${record.dig("kubernetes","labels","release")}
@@ -322,7 +327,7 @@ data:
       <match **>
         @type splunk_hec
         protocol https
-        hec_host "MY-SPLUNK-HOST"
+        hec_host "splunk-collector.klarna.net"
         hec_port 8088
         hec_token "#{ENV['SPLUNK_HEC_TOKEN']}"
         index_key index
