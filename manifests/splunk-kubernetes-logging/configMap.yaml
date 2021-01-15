@@ -368,7 +368,7 @@ data:
           @type json
         </format>
         <format>
-          # we just want to keep the raw logs, not the structure created by docker or journald
+          # we just want to keep the raw c2c logs, not the structure created by docker or journald
           @type single_value
           message_key c2c_log
           add_newline false
